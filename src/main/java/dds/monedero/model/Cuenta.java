@@ -12,11 +12,10 @@ import java.util.List;
 public class Cuenta {
 
   private double saldo = 0;
-  private List<Movimiento> movimientos = new ArrayList<>();
-
+  private List<Movimiento> movimientos = new ArrayList<>(); //Primitive Obsession: usar ArrayList en lugar de List o Collections
   public Cuenta() {
     saldo = 0;
-  }
+  } //Codigo duplicado (es minimo igualmente, pero es redundante)
 
   public Cuenta(double montoInicial) {
     saldo = montoInicial;
@@ -26,11 +25,18 @@ public class Cuenta {
     this.movimientos = movimientos;
   }
 
+  //Le pondria un nombre mas expresivo a este metodo
+  // Podria considerarse un Long Method (se pueden delegar responsabilidades en otros submetodos)
+  //Feature Envy (envia demasiados mensajes a la clase Movimiento)
   public void poner(double cuanto) {
+
+    //Abstraeria las validaciones
+
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
 
+    //Creo que esta verificacion deberia hacerse en la clase Movimiento
     if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
@@ -38,7 +44,11 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
+  // Creo que termina habiendo repeticion de codigo entre sacar y poner (validaciones + new movimiento + agregarlo a la lista de movimientos)
+  // Long method
   public void sacar(double cuanto) {
+
+    // Aca queda aun mas claro que hay que abstraer esta validacion (esta repetida) (Codigo duplicado)
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
@@ -47,6 +57,8 @@ public class Cuenta {
     }
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
+
+    //Demasiadas validaciones, creo que haria falta una abstraccion mas (tipo un metodo validarExtraccion)
     if (cuanto > limite) {
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + limite);
@@ -54,18 +66,25 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
+  // Podria ser considerado un metodo con una long parameter list
+  // Es responsabilidad de la cuenta agregar movimientos a su lista no del movimiento
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
     Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
     movimientos.add(movimiento);
   }
 
+  // REVISAR, mas abstracciones?
+  // No usa abstracciones presentes en movimiento como esDeLaFecha, fueExtraido(fecha), fueDepositado(fecha)
   public double getMontoExtraidoA(LocalDate fecha) {
+
+    // Type Tests: se le pregunta al movimiento si es deposito o no todo el tiempo
     return getMovimientos().stream()
         .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
 
+  //No hace falta este getter, solo accede a su lista la cuenta y puede hacerlo a traves del atributo directamente
   public List<Movimiento> getMovimientos() {
     return movimientos;
   }
@@ -74,6 +93,7 @@ public class Cuenta {
     return saldo;
   }
 
+  //No es necesario, el saldo se le setea con el constructor y luego se maneja con los movimientos.
   public void setSaldo(double saldo) {
     this.saldo = saldo;
   }

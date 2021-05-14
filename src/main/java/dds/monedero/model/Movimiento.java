@@ -7,7 +7,8 @@ public class Movimiento {
   //En ningún lenguaje de programación usen jamás doubles para modelar dinero en el mundo real
   //siempre usen numeros de precision arbitraria, como BigDecimal en Java y similares
   private double monto;
-  private boolean esDeposito;
+  // Primitive obsession: se representa con un boolean algo que puede ser un objeto con comportamiento.
+  private boolean esDeposito; // Si quiero agregar mas tipos de movimientos en el futuro tengo que cambiar todo (poco extensible)
 
   public Movimiento(LocalDate fecha, double monto, boolean esDeposito) {
     this.fecha = fecha;
@@ -15,6 +16,7 @@ public class Movimiento {
     this.esDeposito = esDeposito;
   }
 
+  // Getters sin necesidad (poca proteccion, mas facil de romper el encapsulamiento)
   public double getMonto() {
     return monto;
   }
@@ -23,6 +25,7 @@ public class Movimiento {
     return fecha;
   }
 
+  // REVISAR
   public boolean fueDepositado(LocalDate fecha) {
     return isDeposito() && esDeLaFecha(fecha);
   }
@@ -35,6 +38,7 @@ public class Movimiento {
     return this.fecha.equals(fecha);
   }
 
+  // Redundancia (se pueden obtener a partir del mismo atributo)
   public boolean isDeposito() {
     return esDeposito;
   }
@@ -43,11 +47,14 @@ public class Movimiento {
     return !esDeposito;
   }
 
+  // Misplaced method: el agregar un movimiento a la lista de movimientos deberia ser responsabilidad de la cuenta
   public void agregateA(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
     cuenta.agregarMovimiento(fecha, monto, esDeposito);
   }
 
+  // Nombre muy poco expresivo
+  // Esta rompiento el encapsulamiento calculando el saldo de la cuenta cuando ese dato se puede obtener directamente de ella
   public double calcularValor(Cuenta cuenta) {
     if (esDeposito) {
       return cuenta.getSaldo() + getMonto();
