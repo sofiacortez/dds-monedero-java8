@@ -34,7 +34,7 @@ public class Movimiento {
     return this.fecha.equals(fecha);
   }
 
-  // Redundancia (se pueden obtener a partir del mismo atributo)
+  // Redundancia (se puede obtener a partir del mismo atributo)
   public boolean isDeposito() {
     return esDeposito;
   }
@@ -45,6 +45,7 @@ public class Movimiento {
 
   // Nombre muy poco expresivo
   // Esta rompiento el encapsulamiento calculando el saldo de la cuenta cuando ese dato se puede obtener directamente de ella
+  // Type Tests: se le pregunta al movimiento si es deposito o no todo el tiempo
   public double calcularValor(Cuenta cuenta) {
     if (esDeposito) {
       return cuenta.getSaldo() + getMonto();

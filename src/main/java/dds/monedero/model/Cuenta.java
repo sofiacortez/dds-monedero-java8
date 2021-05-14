@@ -78,13 +78,9 @@ public class Cuenta {
     movimientos.add(movimiento);
   }
 
-  // REVISAR, mas abstracciones?
-  // No usa abstracciones presentes en movimiento como esDeLaFecha, fueExtraido(fecha), fueDepositado(fecha)
   public double getMontoExtraidoA(LocalDate fecha) {
-
-    // Type Tests: se le pregunta al movimiento si es deposito o no todo el tiempo
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .filter(movimiento -> movimiento.fueExtraido(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
