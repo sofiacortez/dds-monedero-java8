@@ -47,12 +47,6 @@ public class Movimiento {
     return !esDeposito;
   }
 
-  // Misplaced method: el agregar un movimiento a la lista de movimientos deberia ser responsabilidad de la cuenta
-  public void agregateA(Cuenta cuenta) {
-    cuenta.setSaldo(calcularValor(cuenta));
-    cuenta.agregarMovimiento(fecha, monto, esDeposito);
-  }
-
   // Nombre muy poco expresivo
   // Esta rompiento el encapsulamiento calculando el saldo de la cuenta cuando ese dato se puede obtener directamente de ella
   public double calcularValor(Cuenta cuenta) {

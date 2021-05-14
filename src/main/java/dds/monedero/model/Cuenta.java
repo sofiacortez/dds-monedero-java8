@@ -26,8 +26,14 @@ public class Cuenta {
 
   public void depositarDinero(double cuanto) {
     validarDeposito(cuanto);
+    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, true);
+    agregarMovimiento(movimiento);
+  }
 
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+  public void extraerDinero(double cuanto) {
+    validarExtraccion(cuanto);
+    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, false);
+    agregarMovimiento(movimiento);
   }
 
   public void validarDeposito(double cuanto) {
@@ -45,14 +51,6 @@ public class Cuenta {
     if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
-  }
-
-  // Creo que termina habiendo repeticion de codigo entre sacar y poner (validaciones + new movimiento + agregarlo a la lista de movimientos)
-  public void extraerDinero(double cuanto) {
-
-    validarExtraccion(cuanto);
-
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
   public void validarExtraccion(double cuanto) {
@@ -76,10 +74,7 @@ public class Cuenta {
     }
   }
 
-  // Podria ser considerado un metodo con una long parameter list
-  // Es responsabilidad de la cuenta agregar movimientos a su lista no del movimiento
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
+  public void agregarMovimiento(Movimiento movimiento) {
     movimientos.add(movimiento);
   }
 
