@@ -13,9 +13,6 @@ public class Cuenta {
 
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>(); //Primitive Obsession: usar ArrayList en lugar de List o Collections
-  public Cuenta() {
-    saldo = 0;
-  } //Codigo duplicado (es minimo igualmente, pero es redundante)
 
   public Cuenta(double montoInicial) {
     saldo = montoInicial;
