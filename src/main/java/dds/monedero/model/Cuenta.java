@@ -12,7 +12,9 @@ import java.util.List;
 public class Cuenta {
 
   private double saldo = 0;
-  private List<Movimiento> movimientos = new ArrayList<>(); //Primitive Obsession: usar ArrayList en lugar de List o Collections
+  private List<Movimiento> movimientos = new ArrayList<>();
+
+  public Cuenta() {}
 
   public Cuenta(double montoInicial) {
     saldo = montoInicial;
@@ -25,7 +27,7 @@ public class Cuenta {
   //Le pondria un nombre mas expresivo a este metodo
   // Podria considerarse un Long Method (se pueden delegar responsabilidades en otros submetodos)
   //Feature Envy (envia demasiados mensajes a la clase Movimiento)
-  public void poner(double cuanto) {
+  public void depositarDinero(double cuanto) {
 
     //Abstraeria las validaciones
 
@@ -43,7 +45,7 @@ public class Cuenta {
 
   // Creo que termina habiendo repeticion de codigo entre sacar y poner (validaciones + new movimiento + agregarlo a la lista de movimientos)
   // Long method
-  public void sacar(double cuanto) {
+  public void extraerDinero(double cuanto) {
 
     // Aca queda aun mas claro que hay que abstraer esta validacion (esta repetida) (Codigo duplicado)
     if (cuanto <= 0) {
