@@ -78,6 +78,7 @@ public class Cuenta {
     movimientos.add(movimiento);
   }
 
+  // No se si es necesario este metodo pero si lo fuera haria uno para monto depositado en cierta fecha tambien.
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
         .filter(movimiento -> movimiento.fueExtraido(fecha))
