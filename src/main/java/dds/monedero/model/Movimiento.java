@@ -16,13 +16,9 @@ public class Movimiento {
     this.esDeposito = esDeposito;
   }
 
-  // Getters sin necesidad (poca proteccion, mas facil de romper el encapsulamiento)
+  // CUANTO CORRIJA EL METODO "CALCULARVALOR" LO SACO
   public double getMonto() {
     return monto;
-  }
-
-  public LocalDate getFecha() {
-    return fecha;
   }
 
   // REVISAR

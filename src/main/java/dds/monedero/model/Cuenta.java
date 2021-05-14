@@ -89,18 +89,12 @@ public class Cuenta {
         .sum();
   }
 
-  //No hace falta este getter, solo accede a su lista la cuenta y puede hacerlo a traves del atributo directamente
   public List<Movimiento> getMovimientos() {
     return movimientos;
   }
 
   public double getSaldo() {
     return saldo;
-  }
-
-  //No es necesario, el saldo se le setea con el constructor y luego se maneja con los movimientos.
-  public void setSaldo(double saldo) {
-    this.saldo = saldo;
   }
 
 }
