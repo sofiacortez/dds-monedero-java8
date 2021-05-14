@@ -21,9 +21,8 @@ public class Movimiento {
     return monto;
   }
 
-  // REVISAR
   public boolean fueDepositado(LocalDate fecha) {
-    return isDeposito() && esDeLaFecha(fecha);
+    return esDeposito && esDeLaFecha(fecha);
   }
 
   public boolean fueExtraido(LocalDate fecha) {
@@ -32,11 +31,6 @@ public class Movimiento {
 
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
-  }
-
-  // Redundancia (se puede obtener a partir del mismo atributo)
-  public boolean isDeposito() {
-    return esDeposito;
   }
 
   public boolean isExtraccion() {
