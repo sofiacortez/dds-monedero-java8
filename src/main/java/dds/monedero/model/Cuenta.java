@@ -24,45 +24,56 @@ public class Cuenta {
     this.movimientos = movimientos;
   }
 
-  //Le pondria un nombre mas expresivo a este metodo
-  // Podria considerarse un Long Method (se pueden delegar responsabilidades en otros submetodos)
-  //Feature Envy (envia demasiados mensajes a la clase Movimiento)
   public void depositarDinero(double cuanto) {
-
-    //Abstraeria las validaciones
-
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
-
-    //Creo que esta verificacion deberia hacerse en la clase Movimiento
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
-    }
+    validarDeposito(cuanto);
 
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
-  // Creo que termina habiendo repeticion de codigo entre sacar y poner (validaciones + new movimiento + agregarlo a la lista de movimientos)
-  // Long method
-  public void extraerDinero(double cuanto) {
+  public void validarDeposito(double cuanto) {
+    validarMonto(cuanto);
+    verificarCantidadDeDepositos();
+  }
 
-    // Aca queda aun mas claro que hay que abstraer esta validacion (esta repetida) (Codigo duplicado)
+  public void validarMonto(double cuanto) {
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
+  }
+
+  public void verificarCantidadDeDepositos() {
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+    }
+  }
+
+  // Creo que termina habiendo repeticion de codigo entre sacar y poner (validaciones + new movimiento + agregarlo a la lista de movimientos)
+  public void extraerDinero(double cuanto) {
+
+    validarExtraccion(cuanto);
+
+    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+  }
+
+  public void validarExtraccion(double cuanto) {
+    validarMonto(cuanto);
+    verificarSaldoDisponible(cuanto);
+    verificarMaximaExtraccionDiaria(cuanto);
+  }
+
+  public void verificarSaldoDisponible(double cuanto) {
     if (getSaldo() - cuanto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
+  }
+
+  public void verificarMaximaExtraccionDiaria(double cuanto) {
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
-
-    //Demasiadas validaciones, creo que haria falta una abstraccion mas (tipo un metodo validarExtraccion)
     if (cuanto > limite) {
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + limite);
     }
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
   // Podria ser considerado un metodo con una long parameter list
