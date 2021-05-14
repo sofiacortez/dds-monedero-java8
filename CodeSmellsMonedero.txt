@@ -1,0 +1,43 @@
+Code smells que identifiqué:
+
+1. Código duplicado (es mínimo pero igualmente es redundante)
+El saldo se inicializa por default en 0 al igualarlo a 0 en el atributo. No hace falta agregar un constructor en el que también se inicialice en 0.
+
+2. Falta de expresividad en los nombres de los métodos 
+Los nombres de los métodos son poco expresivos: sacar, poner.
+
+3. Long methods
+Los métodos "poner" y "sacar" tienen demasiadas responsabilidades. Delegaría algunas responsabilidades en otros métodos, abstraería las validaciones.
+
+4. Misplaced method
+El metodo agregarA (en la clase Movimiento). La responsabilidad de agregar un movimiento a la lista deberia ser siempre de la Cuenta y nunca del Movimiento. 
+Resolución: saco el metodo agregarA de Movimiento y corrijo el metodo agregarMovimiento en Cuenta.
+
+5. Getters y setters sin sentido
+El setter "setSaldo" no es necesario, el saldo se le setea inicialmente en la instanciacion y luego se maneja con los movimientos. 
+Los getters "getMonto" y "getFecha" tampoco son necesarios.
+
+(Tampoco estoy segura si es necesario el getter "getMovimientos" ya que solo se usa en un metodo de la Cuenta (con this.movimientos seria suficiente)).
+
+6. Mas código duplicado: hay métodos en los que se delegan ciertas responsabilidades pero que luego cuando se pueden usar se vuelve a repetir todo el código correspondiente a esas abstracciones.
+
+getMontoExtraidoA(fecha) por ejemplo, en el filter podría usar fueExtraido(fecha) y no lo hace.
+
+8. Type tests (no estoy segura si es un Type test igualmente)
+Pero, se le pregunta al movimiento si es deposito o no todo el tiempo.
+
+9. El metodo calcularValor rompe el encapsulamiento calculando el saldo de la cuenta (el movimiento no tiene por que conocer el saldo de la cuenta).
+
+10. Primitive obsession
+Se representa con un boolean a Deposito y Extraccion que podrían ser objetos con comportamiento. De esta forma, si quiero agregar mas tipos de movimientos en el futuro es muy complicado (hace al codigo poco extensible).
+
+Se me ocurre hacer un strategy (clase abstracta movimiento y Deposito y Extraccion la implementan). Pero, por ahora no tendrían movimiento.
+
+-----------------------------
+
+Me quedo en duda si estaría bien hacer una clase aparte para todas las validaciones que se realizan en la clase Cuenta ya que puede que de esta forma siga siendo considerada una Large class / God class por todas las responsabilidades que tiene.
+
+Me sigue sonando raro que la clase movimiento solo se componga de atributos, getters y setters (no posee comportamiento).
+
+
+
