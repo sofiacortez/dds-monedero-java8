@@ -16,11 +16,6 @@ public class Movimiento {
     this.esDeposito = esDeposito;
   }
 
-  // CUANTO CORRIJA EL METODO "CALCULARVALOR" LO SACO
-  public double getMonto() {
-    return monto;
-  }
-
   public boolean fueDepositado(LocalDate fecha) {
     return esDeposito && esDeLaFecha(fecha);
   }
@@ -37,14 +32,4 @@ public class Movimiento {
     return !esDeposito;
   }
 
-  // Nombre muy poco expresivo
-  // Esta rompiento el encapsulamiento calculando el saldo de la cuenta cuando ese dato se puede obtener directamente de ella
-  // Type Tests: se le pregunta al movimiento si es deposito o no todo el tiempo
-  public double calcularValor(Cuenta cuenta) {
-    if (esDeposito) {
-      return cuenta.getSaldo() + getMonto();
-    } else {
-      return cuenta.getSaldo() - getMonto();
-    }
-  }
 }
